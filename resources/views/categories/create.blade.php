@@ -5,51 +5,54 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 bg-white min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden   sm:rounded-lg">
 
-                <h1 class="text-3xl font-semibold mb-4">Create Category</h1>
+                <div class="max-w-7xl mx-auto py-10  ">
+                    <div class="mt-5 md:mt-0 md:col-span-2">
+                        <form method="post" action="{{ route('categories.store') }}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="overflow-hidden sm:rounded-md">
+                                <div class="grid grid-cols-6 gap-6">
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <label for="title"
+                                            class="block text-sm font-medium text-gray-700">Title</label>
+                                        <input type="text" name="title" id="title"
+                                            class="form-input rounded-md shadow-sm mt-1 block w-full"
+                                            value="{{ old('title', '') }}" />
+                                        @error('title')
+                                            <p class="text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
 
-                @if ($errors->any())
-                    <div class="bg-red-200 text-red-700 px-4 py-2 mb-4 rounded-md">
-                        <ul class="list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <label for="image"
+                                            class="block text-sm font-medium text-gray-700">Image</label>
+                                        <input type="file" name="image" id="image"
+                                            class=" border border-gray-400 py-2 px-4 form-input rounded-md shadow-sm mt-1 block w-full"
+                                            value="{{ old('image', '') }}" />
+                                        @error('image')
+                                            <p class="text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="px-4 py-3 text-right sm:px-6">
+                                    <a href="{{ route('categories.index') }}"
+                                        class="bg-gray-300 text-gray-700 px-4 py-2 mx-4 rounded-md hover:bg-gray-400 ml-2">Cancel</a>
+                                    <button type="submit"
+                                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Create
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                @endif
+                </div>
 
-                <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="mb-4">
-                        <label for="title" class="block font-medium text-gray-700 mb-2">Title</label>
-                        <input type="text" name="title" id="title" value="{{ old('title') }}"
-                            class="w-full border border-gray-400 py-2 px-4 rounded-md @error('title') border-red-500 @enderror">
-                        @error('title')
-                            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="image" class="block font-medium text-gray-700 mb-2">Image</label>
-                        <input type="file" name="image" id="image"
-                            class="border border-gray-400 py-2 px-4 rounded-md @error('image') border-red-500 @enderror">
-                        @error('image')
-                            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <button type="submit"
-                            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Create
-                            Category</button>
-                        <a href="{{ route('categories.index') }}"
-                            class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 ml-2">Cancel</a>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

@@ -78,7 +78,8 @@ class BlogController extends Controller
             $imageName = time() . '_' . $imageName;
             $image->move('images', $imageName);
 
-            unlink('images/' . $blog->image);
+            if (file_exists('images/' . $blog->image))
+                unlink('images/' . $blog->image);
             $blog->image = $imageName;
         }
 
@@ -92,7 +93,8 @@ class BlogController extends Controller
 
     public function destroy(Blog $blog)
     {
-        unlink('images/' . $blog->image);
+        if (file_exists('images/' . $blog->image))
+            unlink('images/' . $blog->image);
         $blog->delete();
 
         return redirect()->route('blogs.index')->with('success', 'Blog post deleted successfully.');

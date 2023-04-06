@@ -4,7 +4,7 @@
             {{ __('Categories') }}
         </h2>
     </x-slot>
-    <div class="py-12">
+    <div class="py-12 bg-white min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
@@ -13,7 +13,7 @@
                 @endif
 
                 <a href="{{ route('categories.create') }}"
-                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mb-4 inline-block">Create
+                    class="  text-white px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 mb-4 inline-block">Create
                     Category</a>
 
                 <table class="table-auto w-full border-collapse">

@@ -57,7 +57,8 @@ class CategoryController extends Controller
             $imageName = $image->getClientOriginalName();
             $imageName = time() . '_' . $imageName;
             $image->move('images', $imageName);
-
+            if (file_exists('images/' . $category->image))
+                unlink('images/' . $category->image);
             $validatedData['image'] = $imageName;
         }
         $category->update($validatedData);
@@ -70,6 +71,9 @@ class CategoryController extends Controller
     }
     public function destroy(Category $category)
     {
+
+        if (file_exists('images/' . $category->image))
+            unlink('images/' . $category->image);
         $category->delete();
 
         return redirect('/categories')->with('success', 'Category deleted successfully!');

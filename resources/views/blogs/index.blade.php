@@ -4,7 +4,7 @@
             <h2 class="text-2xl font-bold leading-tight text-gray-900">
                 {{ __('Blog') }}
             </h2>
-            <a href="{{ route('blogs.create') }}" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
+            <a href="{{ route('blogs.create') }}" class="px-4 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700">
                 {{ __('Create Post') }}
             </a>
         </div>
