@@ -9,7 +9,6 @@
                 {{ __('Create Post') }}
             </a>
         </div>
-
         <div class="mt-6">
             @if ($blogs->isEmpty())
                 <p class="text-gray-500">{{ __('No blogs found.') }}</p>
@@ -24,7 +23,8 @@
                             <div class="flex-1 p-6">
                                 <div class="flex justify-between">
                                     <p class="text-lg font-bold text-gray-900">{{ $blog->title }}</p>
-                                    <p class="text-sm font-medium text-gray-500">{{ $blog->category->name }}</p>
+                                    <p class="text-sm font-medium text-gray-500">
+                                        {{ $blog->category ? $blog->category->title : 'Uncategorized' }}</p>
                                 </div>
                                 <p class="mt-4 text-gray-700">{{ Str::limit($blog->content, 100) }}</p>
                                 <div class="flex justify-between items-center mt-6">
