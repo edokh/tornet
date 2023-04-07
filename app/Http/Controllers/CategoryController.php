@@ -35,7 +35,7 @@ class CategoryController extends Controller
             'ar' => $request->input('title_ar'),
             'ku' => $request->input('title_ku'),
         ]);
-
+        $imageName = 'default.jpg';
         if ($request->hasFile('image')) {
             $imageName = 'test.jpg';
             if ($request->hasFile('image')) {
@@ -89,7 +89,6 @@ class CategoryController extends Controller
     }
     public function destroy(Category $category)
     {
-
         $category->delete();
 
         return redirect('/categories')->with('success', 'Category deleted successfully!');

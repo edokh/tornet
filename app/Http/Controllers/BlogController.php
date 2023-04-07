@@ -84,7 +84,6 @@ class BlogController extends Controller
 
     public function update(Request $request, Blog $blog)
     {
-        Log::info($request);
         $request->validate([
             'title_en' => 'required|max:100',
             'title_ar' => 'required|max:100',
