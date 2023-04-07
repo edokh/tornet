@@ -21,26 +21,35 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|max:100',
+
+        $request->validate([
+            'title_en' => 'required|max:100',
+            'title_ar' => 'required|max:100',
+            'title_ku' => 'required|max:100',
             'image' => 'required',
         ]);
 
-        $imageName = 'test.jpg';
+        $category = new Category;
+        $category->setTranslations('title', [
+            'en' => $request->input('title_en'),
+            'ar' => $request->input('title_ar'),
+            'ku' => $request->input('title_ku'),
+        ]);
+
         if ($request->hasFile('image')) {
-            $image = $request->image;
-            $imageName = $image->getClientOriginalName();
-            $imageName = time() . '_' . $imageName;
-            $image->move('images', $imageName);
+            $imageName = 'test.jpg';
+            if ($request->hasFile('image')) {
+                $image = $request->image;
+                $imageName = $image->getClientOriginalName();
+                $imageName = time() . '_' . $imageName;
+                $image->move('images', $imageName);
+            }
         }
 
-        // $imagePath = $request->image->store('images', 'public');
+        $category->image = $imageName;
+        $category->save();
 
-        $validatedData['image'] = $imageName;
-
-        Category::create($validatedData);
-
-        return redirect('/categories')->with('success', 'Category created successfully!');
+        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 
     public function edit(Category $category)
@@ -50,22 +59,29 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|max:100',
-            'image' => 'image|max:2048',
+        $request->validate([
+            'title_en' => 'required|max:255',
+            'title_ar' => 'required|max:255',
+            'title_ku' => 'required|max:255',
         ]);
+
+        $category->setTranslations('title', [
+            'en' => $request->input('title_en'),
+            'ar' => $request->input('title_ar'),
+            'ku' => $request->input('title_ku'),
+        ]);
+
         if ($request->hasFile('image')) {
             $image = $request->image;
             $imageName = $image->getClientOriginalName();
             $imageName = time() . '_' . $imageName;
             $image->move('images', $imageName);
-            // if (file_exists('images/' . $category->image))
-            //     unlink('images/' . $category->image);
-            $validatedData['image'] = $imageName;
+            $category->image = $imageName;
         }
-        $category->update($validatedData);
 
-        return redirect('/categories')->with('success', 'Category updated successfully!');
+        $category->save();
+
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
     public function show(Category $category)
     {

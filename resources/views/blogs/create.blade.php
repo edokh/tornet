@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
-    <div class="py-12 bg-white min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+    <div class="container mx-auto">
+        <div class="flex justify-center">
+            <div class="w-full lg:w-1/2 bg-white p-8 rounded-lg shadow-lg">
 
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     {{ __('Create Blog') }}
@@ -13,22 +13,64 @@
                             @csrf
 
                             <div class="overflow-hidden sm:rounded-md">
-                                <div class="grid grid-cols-6 gap-6">
+                                <div class="">
+
+                                    <div class="mb-6">
+                                        <label for="title_en"
+                                            class="block text-gray-700 font-bold mb-2">{{ __('Title (English)') }}</label>
+                                        <input type="text" name="title_en" id="title_en"
+                                            class="form-input rounded-md shadow-sm w-full @error('title_en') border-red-500 @enderror"
+                                            value="{{ old('title_en') }}">
+                                        @error('title_en')
+                                            <span class="text-red-500 mt-2 text-sm">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-6">
+                                        <label for="title_ar"
+                                            class="block text-gray-700 font-bold mb-2 ">{{ __('Title (Arabic)') }}</label>
+                                        <input type="text" name="title_ar" id="title_ar" dir="rtl"
+                                            class="form-input rounded-md shadow-sm w-full @error('title_ar') border-red-500 @enderror"
+                                            value="{{ old('title_ar') }}">
+                                        @error('title_ar')
+                                            <span class="text-red-500 mt-2 text-sm">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-6">
+                                        <label for="title_ku"
+                                            class="block text-gray-700 font-bold mb-2">{{ __('Title (Kurdish)') }}</label>
+                                        <input type="text" name="title_ku" id="title_ku" dir="rtl"
+                                            class="form-input rounded-md shadow-sm w-full @error('title_ku') border-red-500 @enderror"
+                                            value="{{ old('title_ku') }}">
+                                        @error('title_ku')
+                                            <span class="text-red-500 mt-2 text-sm">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
                                     <div class="col-span-6 sm:col-span-4">
-                                        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-                                        <input type="text" name="title" id="title"
-                                            class="form-input rounded-md shadow-sm mt-1 block w-full"
-                                            value="{{ old('title', '') }}" />
-                                        @error('title')
+                                        <label for="content_en"
+                                            class="block text-gray-700 font-bold mb-2">{{ __('Content (English)') }}</label>
+                                        <textarea name="content_en" id="content_en" rows="5" class="form-input rounded-md shadow-sm mt-1 block w-full">{{ old('content_en', '') }}</textarea>
+                                        @error('content_en')
                                             <p class="text-sm text-red-600">{{ $message }}</p>
                                         @enderror
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                        <label for="content"
-                                            class="block text-sm font-medium text-gray-700">Content</label>
-                                        <textarea name="content" id="content" rows="5" class="form-input rounded-md shadow-sm mt-1 block w-full">{{ old('content', '') }}</textarea>
-                                        @error('content')
+                                        <label for="content_ar"
+                                            class="block text-gray-700 font-bold mb-2">{{ __('Content (Arabic)') }}</label>
+                                        <textarea name="content_ar" dir="rtl" id="content_ar" rows="5"
+                                            class="form-input rounded-md shadow-sm mt-1 block w-full">{{ old('content_ar', '') }}</textarea>
+                                        @error('content_ar')
+                                            <p class="text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <label for="content_ku"
+                                            class="block text-gray-700 font-bold mb-2">{{ __('Content (Kurdish)') }}</label>
+                                        <textarea name="content_ku" dir="rtl" id="content_ku" rows="5"
+                                            class="form-input rounded-md shadow-sm mt-1 block w-full">{{ old('content_ku', '') }}</textarea>
+                                        @error('content_ku')
                                             <p class="text-sm text-red-600">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -79,4 +121,3 @@
         </div>
     </div>
 @endsection
-{{-- </x-app-layout> --}}

@@ -1,47 +1,56 @@
 @extends('layouts.app')
+
 @section('content')
-    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="flex justify-between">
-            <h2 class="text-2xl font-bold leading-tight text-gray-900">
-                {{ __('Blog') }}
-            </h2>
-            <a href="{{ route('blogs.create') }}" class="px-4 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700">
-                {{ __('Create Post') }}
-            </a>
-        </div>
-        <div class="mt-6">
-            @if ($blogs->isEmpty())
-                <p class="text-gray-500">{{ __('No blogs found.') }}</p>
-            @else
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    @foreach ($blogs as $blog)
-                        <div class="flex flex-col bg-white rounded-lg shadow-md overflow-hidden">
-                            <div class="flex-shrink-0">
-                                <img class="object-cover w-full h-48" src="{{ '/images/' . $blog->image }}"
-                                    alt="{{ $blog->title }}">
-                            </div>
-                            <div class="flex-1 p-6">
-                                <div class="flex justify-between">
-                                    <p class="text-lg font-bold text-gray-900">{{ $blog->title }}</p>
-                                    <p class="text-sm font-medium text-gray-500">
-                                        {{ $blog->category ? $blog->category->title : 'Uncategorized' }}</p>
-                                </div>
-                                <p class="mt-4 text-gray-700">{{ Str::limit($blog->content, 100) }}</p>
-                                <div class="flex justify-between items-center mt-6">
-                                    <a href="{{ route('blogs.show', $blog->id) }}"
-                                        class="text-sm font-medium text-blue-500 hover:text-blue-600">{{ __('View') }}</a>
-                                    <p class="text-sm font-medium text-gray-500">
-                                        {{ __('Created on :date', ['date' => $blog->created_at->format('M d, Y')]) }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+    <div class="container mx-auto">
+        <div class="flex justify-center">
+            <div class="w-full lg:w-3/4 bg-white p-8 rounded-lg shadow-lg">
+                <h1 class="text-2xl font-bold mb-8">{{ __('Blogs') }}</h1>
+                <div class="mb-6">
+                    <a href="{{ route('blogs.create') }}"
+                        class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400">{{ __('Create Blog') }}</a>
                 </div>
-                <div class="mt-6">
-                    {{ $blogs->links() }}
-                </div>
-            @endif
+                @if (count($blogs) > 0)
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="text-left font-bold py-2 px-4">{{ __('Title (English)') }}</th>
+                                <th class="text-left font-bold py-2 px-4">{{ __('Title (Arabic)') }}</th>
+                                <th class="text-left font-bold py-2 px-4">{{ __('Title (Kurdish)') }}</th>
+                                <th class="text-left font-bold py-2 px-4">{{ __('Actions') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($blogs as $blog)
+                                <tr class="border-t">
+                                    <td class="py-2 px-4">{{ $blog->getTranslation('title', 'en') }}</td>
+                                    <td class="py-2 px-4">{{ $blog->getTranslation('title', 'ar') }}</td>
+                                    <td class="py-2 px-4">{{ $blog->getTranslation('title', 'ku') }}</td>
+                                    <td class="py-2 px-4">
+                                        <a href="{{ route('blogs.show', $blog->id) }}"
+                                            class="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-400">{{ __('View') }}</a>
+                                        <a href="{{ route('blogs.edit', $blog->id) }}"
+                                            class="bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-400">{{ __('Edit') }}</a>
+                                        <form action="{{ route('blogs.destroy', $blog->id) }}" method="POST"
+                                            class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-400"
+                                                onclick="return confirm('Are you sure you want to delete this Blog?')">{{ __('Delete') }}</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                    <div class="mt-6">
+                        {{ $blogs->links() }}
+                    </div>
+                @else
+                    <p class="text-gray-700">{{ __('No blogs found.') }}</p>
+                @endif
+            </div>
         </div>
     </div>
 @endsection

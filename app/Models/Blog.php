@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Blog extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasTranslations;
 
     protected $fillable = [
         'title',
@@ -18,6 +19,10 @@ class Blog extends Model
         'author_id',
     ];
 
+    public $translatable = [
+        'title',
+        'content',
+    ];
     public function category()
     {
         return $this->belongsTo(Category::class);

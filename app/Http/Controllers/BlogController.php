@@ -6,12 +6,13 @@ use App\Models\Blog;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::with('category', 'author')->where('author_id', Auth::id())->paginate(3);
+        $blogs = Blog::with('category', 'author')->where('author_id', Auth::id())->paginate(4);
         return view('blogs.index', compact('blogs'));
     }
 
@@ -23,9 +24,13 @@ class BlogController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|max:100',
-            'content' => 'required|max:255',
+        $request->validate([
+            'title_en' => 'required|max:100',
+            'title_ar' => 'required|max:100',
+            'title_ku' => 'required|max:100',
+            'content_en' => 'required|max:255',
+            'content_ar' => 'required|max:255',
+            'content_ku' => 'required|max:255',
             'category_id' => 'required',
             'image' => 'required',
         ]);
@@ -39,9 +44,19 @@ class BlogController extends Controller
         }
 
         $blog = new Blog();
-        $blog->title = $validatedData['title'];
-        $blog->content = $validatedData['content'];
-        $blog->category_id = $validatedData['category_id'];
+
+        $blog->setTranslations('title', [
+            'en' => $request->input('title_en'),
+            'ar' => $request->input('title_ar'),
+            'ku' => $request->input('title_ku'),
+        ]);
+        $blog->setTranslations('content', [
+            'en' => $request->input('content_en'),
+            'ar' => $request->input('content_ar'),
+            'ku' => $request->input('content_ku'),
+        ]);
+
+        $blog->category_id = $request['category_id'];
         $blog->image = $imageName;
         $blog->author_id = Auth::id();
         $blog->save();
@@ -69,31 +84,41 @@ class BlogController extends Controller
 
     public function update(Request $request, Blog $blog)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|max:100',
-            'content' => 'required|max:255',
+        Log::info($request);
+        $request->validate([
+            'title_en' => 'required|max:100',
+            'title_ar' => 'required|max:100',
+            'title_ku' => 'required|max:100',
+            'content_en' => 'required|max:255',
+            'content_ar' => 'required|max:255',
+            'content_ku' => 'required|max:255',
             'category_id' => 'required',
-            'image' => '',
+        ]);
+
+        $blog->setTranslations('title', [
+            'en' => $request->input('title_en'),
+            'ar' => $request->input('title_ar'),
+            'ku' => $request->input('title_ku'),
+        ]);
+
+        $blog->setTranslations('content', [
+            'en' => $request->input('content_en'),
+            'ar' => $request->input('content_ar'),
+            'ku' => $request->input('content_ku'),
         ]);
 
         if ($request->hasFile('image')) {
-
             $image = $request->image;
             $imageName = $image->getClientOriginalName();
             $imageName = time() . '_' . $imageName;
             $image->move('images', $imageName);
-
-            // if (file_exists('images/' . $blog->image))
-            //     unlink('images/' . $blog->image);
             $blog->image = $imageName;
         }
 
-        $blog->title = $validatedData['title'];
-        $blog->content = $validatedData['content'];
-        $blog->category_id = $validatedData['category_id'];
+        $blog->category_id = $request['category_id'];
         $blog->save();
 
-        return redirect()->route('blogs.index')->with('success', 'Blog post updated successfully.');
+        return redirect()->route('blogs.index')->with('success', 'Blog updated successfully.');
     }
 
     public function destroy(Blog $blog)
