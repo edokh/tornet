@@ -1,14 +1,12 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Blog') }}
-        </h2>
-    </x-slot>
-
+@extends('layouts.app')
+@section('content')
     <div class="py-12 bg-white min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    {{ __('Edit Blog') }}
+                </h2>
                 <div class="max-w-7xl mx-auto py-10 ">
                     <div class="mt-5 md:mt-0 md:col-span-2">
                         <form action="{{ route('blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
@@ -84,4 +82,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

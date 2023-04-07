@@ -1,4 +1,5 @@
-<x-app-layout>
+@extends('layouts.app')
+@section('content')
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div class="flex justify-between">
             <h2 class="text-2xl font-bold leading-tight text-gray-900">
@@ -43,4 +44,4 @@
             @endif
         </div>
     </div>
-</x-app-layout>
+@endsection

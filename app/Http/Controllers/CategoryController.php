@@ -23,13 +23,16 @@ class CategoryController extends Controller
     {
         $validatedData = $request->validate([
             'title' => 'required|max:100',
-            'image' => 'required|image|max:2048',
+            'image' => 'required',
         ]);
 
-        $image = $request->image;
-        $imageName = $image->getClientOriginalName();
-        $imageName = time() . '_' . $imageName;
-        $image->move('images', $imageName);
+        $imageName = 'test.jpg';
+        if ($request->hasFile('image')) {
+            $image = $request->image;
+            $imageName = $image->getClientOriginalName();
+            $imageName = time() . '_' . $imageName;
+            $image->move('images', $imageName);
+        }
 
         // $imagePath = $request->image->store('images', 'public');
 
@@ -47,7 +50,6 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        Log::info($request);
         $validatedData = $request->validate([
             'title' => 'required|max:100',
             'image' => 'image|max:2048',
@@ -57,8 +59,8 @@ class CategoryController extends Controller
             $imageName = $image->getClientOriginalName();
             $imageName = time() . '_' . $imageName;
             $image->move('images', $imageName);
-            if (file_exists('images/' . $category->image))
-                unlink('images/' . $category->image);
+            // if (file_exists('images/' . $category->image))
+            //     unlink('images/' . $category->image);
             $validatedData['image'] = $imageName;
         }
         $category->update($validatedData);
@@ -72,8 +74,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
 
-        if (file_exists('images/' . $category->image))
-            unlink('images/' . $category->image);
         $category->delete();
 
         return redirect('/categories')->with('success', 'Category deleted successfully!');

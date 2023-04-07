@@ -13,7 +13,7 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::with('category', 'author')->paginate(2);
+        $blogs = Blog::with('category', 'author')->where('author_id', Auth::id())->paginate(10);
         return view('blogs.index', compact('blogs'));
     }
 
@@ -25,20 +25,20 @@ class BlogController extends Controller
 
     public function store(Request $request)
     {
-        Log::info($request);
         $validatedData = $request->validate([
             'title' => 'required|max:100',
             'content' => 'required|max:255',
             'category_id' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required',
         ]);
 
-        // $imagePath = $request->file('image')->store('image');
-
-        $image = $request->image;
-        $imageName = $image->getClientOriginalName();
-        $imageName = time() . '_' . $imageName;
-        $image->move('images', $imageName);
+        $imageName = 'test.jpg';
+        if ($request->hasFile('image')) {
+            $image = $request->image;
+            $imageName = $image->getClientOriginalName();
+            $imageName = time() . '_' . $imageName;
+            $image->move('images', $imageName);
+        }
 
         $blog = new Blog();
         $blog->title = $validatedData['title'];
@@ -53,11 +53,18 @@ class BlogController extends Controller
 
     public function show(Blog $blog)
     {
+        if ($blog->author_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('blogs.show', compact('blog'));
     }
 
     public function edit(Blog $blog)
     {
+        if ($blog->author_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
         $categories = Category::all();
         return view('blogs.edit', compact('blog', 'categories'));
     }
@@ -68,7 +75,7 @@ class BlogController extends Controller
             'title' => 'required|max:100',
             'content' => 'required|max:255',
             'category_id' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => '',
         ]);
 
         if ($request->hasFile('image')) {
@@ -78,8 +85,8 @@ class BlogController extends Controller
             $imageName = time() . '_' . $imageName;
             $image->move('images', $imageName);
 
-            if (file_exists('images/' . $blog->image))
-                unlink('images/' . $blog->image);
+            // if (file_exists('images/' . $blog->image))
+            //     unlink('images/' . $blog->image);
             $blog->image = $imageName;
         }
 
@@ -93,8 +100,8 @@ class BlogController extends Controller
 
     public function destroy(Blog $blog)
     {
-        if (file_exists('images/' . $blog->image))
-            unlink('images/' . $blog->image);
+        // if (file_exists('images/' . $blog->image))
+        //     unlink('images/' . $blog->image);
         $blog->delete();
 
         return redirect()->route('blogs.index')->with('success', 'Blog post deleted successfully.');
