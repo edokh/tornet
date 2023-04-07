@@ -47,13 +47,16 @@ class BlogController extends Controller
     public function show($id)
     {
         $blog = Blog::find($id);
-
+        if (!$blog)
+            return 'Blog is not exist';
         return $blog;
     }
 
     public function update(Request $request, $id)
     {
         $blog = Blog::find($id);
+        if (!$blog)
+            return 'Blog is not exist';
         $validatedData = $request->validate([
             'title' => 'required|max:100',
             'content' => 'required|max:255',
@@ -88,6 +91,8 @@ class BlogController extends Controller
         // if (file_exists('images/' . $blog->image))
         //     unlink('images/' . $blog->image);
         $blog = Blog::find($id);
+        if (!$blog)
+            return 'Blog is not exist';
         $blog->delete();
 
         return 'Blog post deleted successfully.';

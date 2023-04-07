@@ -39,8 +39,11 @@ class CategoryController extends Controller
         return 'Category created successfully!';
     }
 
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
+        $category = Category::find($id);
+        if (!$category)
+            return 'Category is not exist';
         $validatedData = $request->validate([
             'title' => 'required|max:100',
             'image' => 'image|max:2048',
@@ -61,14 +64,19 @@ class CategoryController extends Controller
     public function show($id)
     {
         $category = Category::find($id);
+        if (!$category)
+            return 'Category is not exist';
         return $category;
     }
     public function destroy($id)
     {
         $category = Category::find($id);
+        if ($category) {
 
-        $category->delete();
+            $category->delete();
 
-        return 'Category deleted successfully!';
+            return 'Category deleted successfully!';
+        }
+        return 'Category is not exist';
     }
 }
