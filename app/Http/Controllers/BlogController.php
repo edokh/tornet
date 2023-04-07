@@ -13,7 +13,7 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::with('category', 'author')->where('author_id', Auth::id())->paginate(10);
+        $blogs = Blog::with('category', 'author')->where('author_id', Auth::id())->paginate(3);
         return view('blogs.index', compact('blogs'));
     }
 
