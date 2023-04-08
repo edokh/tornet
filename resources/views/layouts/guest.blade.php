@@ -15,6 +15,18 @@
     <!-- Scripts -->
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        input {
+            border: 1px solid #000;
+            padding: 0.5rem !important
+        }
+
+        textarea {
+            border: 1px solid #000;
+            padding: 0.5rem !important
+        }
+    </style>
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
