@@ -13,7 +13,20 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Scripts -->
+
+    <!-- Style -->
+
+    <style>
+        input {
+            border: 1px solid #000;
+            padding: 0.5rem !important
+        }
+
+        textarea {
+            border: 1px solid #000;
+            padding: 0.5rem !important
+        }
+    </style>
 </head>
 
 <body class="font-sans antialiased">
